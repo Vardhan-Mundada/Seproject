@@ -7,12 +7,23 @@
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h2>Register</h2>
-    <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-  </form>
-  <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    <div class="register-page">
+        <div class="form">
+          <div class="register">
+            <div class="register-header">
+              <h3>REGISTER</h3>
+              <p>Create a new account.</p>
+            </div>
+          </div>
+          <form method="post" class="register-form" action="{% url 'register' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username"/>
+            <input type="password" name="password1" placeholder="Password"/>
+            <input type="password" name="password2" placeholder="Confirm Password"/>
+            <button type="submit">Register</button>
+            <p class="message">Already registered? <a href="{% url 'login' %}">Login</a></p>
+          </form>
+        </div>
+      </div>
 </body>
 </html>
