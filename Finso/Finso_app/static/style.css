@@ -5,7 +5,7 @@ header .header{
 }
 header a img{
   width: 134px;
-margin-top: 4px;
+  margin-top: 4px;
 }
 .login-page {
   width: 360px;
@@ -75,4 +75,5 @@ body {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }

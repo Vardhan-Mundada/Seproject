@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="./static/style.css">
-<title> CSS Login Screen Tutorial </title>
+
+<link rel="stylesheet" href="../static/style.css">
+<title>Finso - Login </title>
 </head>
 <body>
   <body>
@@ -14,11 +16,12 @@
             <p>Please enter your credentials to login.</p>
           </div>
         </div>
-        <form class="login-form">
-          <input type="text" placeholder="username"/>
-          <input type="password" placeholder="password"/>
-          <button>login</button>
-          <p class="message">Not registered? <a href="#">Create an account</a></p>
+        <form method="post" class="login-form" action="{% url 'login' %}">
+          {% csrf_token %}
+          <input type="text" name="username" placeholder="Username"/>
+          <input type="password" name="password" placeholder="Password"/>
+          <button type="submit">Login</button>
+          <p class="message">Not registered? <a href="{% url 'register' %}">Create an account</a></p>
         </form>
       </div>
     </div>
