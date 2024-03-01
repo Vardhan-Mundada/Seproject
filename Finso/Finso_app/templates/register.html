@@ -15,7 +15,7 @@
               <p>Create a new account.</p>
             </div>
           </div>
-          <form method="post" class="register-form" action="{% url 'register' %}">
+          <form method="post" class="register-form" action="{% url 'login' %}">
             {% csrf_token %}
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password1" placeholder="Password"/>
