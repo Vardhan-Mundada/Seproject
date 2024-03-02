@@ -146,3 +146,103 @@ def delete_expense(request, expense_id):
         return redirect('expense_list')
 
     return render(request, 'delete_expense.html', {'expense': expense})
+
+
+
+
+#Graph plotting
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+
+
+@login_required
+def expense_statistics(request):
+    expenses = Expense.objects.filter(user=request.user)
+    categories = expenses.values_list('category__name', flat=True).distinct()
+
+    # Paginate the categories
+    paginator = Paginator(categories, 5)  # Show 5 categories per page
+    page = request.GET.get('page')
+
+    try:
+        categories_page = paginator.page(page)
+    except PageNotAnInteger:
+        categories_page = paginator.page(1)
+    except EmptyPage:
+        categories_page = paginator.page(paginator.num_pages)
+
+    # Get the selected categories for the current page
+    selected_categories = categories_page.object_list
+
+    # Create pie chart
+    pie_chart = create_pie_chart(request.user, selected_categories)
+
+    # Create bar chart
+    bar_chart = create_bar_chart(request.user, selected_categories)
+
+    context = {
+        'categories_page': categories_page,
+        'pie_chart': pie_chart,
+        'bar_chart': bar_chart,
+    }
+
+    return render(request, 'expense_statistics.html', context)
+
+def create_pie_chart(user, selected_categories):
+    expenses = Expense.objects.filter(user=user, category__name__in=selected_categories)
+    category_totals = {category: 0 for category in selected_categories}
+
+    for expense in expenses:
+        category_totals[expense.category.name] += expense.amount
+
+    labels = list(category_totals.keys())
+    values = list(category_totals.values())
+
+    # Plotting pie chart with size (5, 5)
+    plt.figure(figsize=(5, 5))
+    plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.title('Expense Distribution by Category')
+
+    # Save the chart to BytesIO buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    # Encode the image to base64
+    image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+
+    plt.close()  # Close the figure to free up resources
+
+    return image_base64
+
+def create_bar_chart(user, selected_categories):
+    expenses = Expense.objects.filter(user=user, category__name__in=selected_categories)
+    category_totals = {category: 0 for category in selected_categories}
+
+    for expense in expenses:
+        category_totals[expense.category.name] += expense.amount
+
+    labels = list(category_totals.keys())
+    values = list(category_totals.values())
+
+    # Plotting bar chart with size (10, 5)
+    plt.figure(figsize=(10, 5))
+    plt.bar(labels, values, color='blue')
+    plt.xlabel('Categories')
+    plt.ylabel('Total Expense Amount')
+    plt.title('Total Expense Amount by Category')
+
+    # Save the chart to BytesIO buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    # Encode the image to base64
+    image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+
+    plt.close()  # Close the figure to free up resources
+
+    return image_base64

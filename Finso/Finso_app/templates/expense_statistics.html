@@ -1,0 +1,41 @@
+<!-- templates/expense_statistics.html -->
+{% extends 'base.html' %}
+
+{% block title %}Expense Statistics{% endblock %}
+
+{% block content %}
+    <h1>Expense Statistics</h1>
+    <div class="toggle-buttons">
+        <button onclick="showPieChart()">Pie Chart</button>
+        <button onclick="showBarChart()">Bar Chart</button>
+    </div>
+    <div>
+        <img id="pie-chart" src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">
+    </div>
+
+    <div>
+        <img id="bar-chart" src="data:image/png;base64,{{ bar_chart }}" alt="Bar Chart" style="display: none;">
+    </div>
+
+    <!-- Toggle buttons -->
+    
+
+    <a href="{% url 'expense_list' %}">Back to Expense List</a>
+
+    <script>
+        function showPieChart() {
+            document.getElementById("pie-chart").style.display = "block";
+            document.getElementById("bar-chart").style.display = "none";
+        }
+
+        function showBarChart() {
+            document.getElementById("pie-chart").style.display = "none";
+            document.getElementById("bar-chart").style.display = "block";
+        }
+
+        // Set the default view to show the pie chart
+        document.addEventListener("DOMContentLoaded", function() {
+            showPieChart();
+        });
+    </script>
+{% endblock %}

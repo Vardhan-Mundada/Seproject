@@ -9,17 +9,23 @@
         <div class="home-text">
             <h1>Track your expenses easily with Finso</h1>
             <p>Effortlessly manage your finances and stay on top of your expenses with Finso, your ultimate expense tracker.</p>
-            <a href="{% url 'expense_list' %}">
+            
             {% if user.is_authenticated %}
+                <a href="{% url 'expense_list' %}">
                 <button type="button">Go to Expense List</button>
+                </a>
+            
+                <a href="{% url 'expense_statistics' %}">
+                <button type="button">Charts</button>
+                 </a>
             {% else %}
                 <span></span>
             {% endif %}
+            
                
-            </a>
+            
         </div>
         <div class="home-image">
-            <!-- Add your vector image here -->
             <img src="../static/images/Gemini_Generated_Image (3).jpg" alt="Expense Tracker Image">
         </div>
     </div>
