@@ -1,0 +1,20 @@
+<!-- templates/expense_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Expense List{% endblock %}
+
+{% block content %}
+    <h1>Expense List</h1>
+    
+    <ul>
+        {% for expense in expenses %}
+            <li>
+                Amount: {{ expense.amount }} - Category: {{ expense.category }} - Content: {{ expense.content }} - Date: {{ expense.date }}
+                <a href="{% url 'edit_expense' expense_id=expense.id %}">Edit</a>
+                <a href="{% url 'delete_expense' expense_id=expense.id %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'add_expense' %}">Add Expense</a>
+{% endblock %}

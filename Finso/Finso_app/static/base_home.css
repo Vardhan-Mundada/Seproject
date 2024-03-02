@@ -3,6 +3,14 @@ body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
 }
+.auth-buttons ul {
+    list-style: none;
+    display: flex;
+}
+
+.auth-buttons ul li{
+    margin-right: 20px;
+}
 
 body {
     font-family: 'Arial', sans-serif;
@@ -33,6 +41,16 @@ body {
 .nav-links ul li {
     margin-right: 20px;
 }
+
+.auth-buttons ul {
+    list-style: none;
+    display: flex;
+}
+
+.auth-buttons ul li{
+    margin-right: 20px;
+}
+
 
 /* Home Page Styles */
 .home-block {

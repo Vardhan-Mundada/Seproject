@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
@@ -31,6 +31,9 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
+def user_logout(request):
+    logout(request)
+    return redirect('home')
 
 # Expense category
 
@@ -92,3 +95,54 @@ def delete_category(request, category_id):
         return redirect('category_list')
 
     return render(request, 'delete_category.html', {'category': category})
+
+
+
+
+#Expense Transaction
+
+from .models import Expense
+from .forms import ExpenseForm
+
+@login_required
+def expense_list(request):
+    expenses = Expense.objects.filter(user=request.user)
+    return render(request, 'expense_list.html', {'expenses': expenses})
+
+@login_required
+def add_expense(request):
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            expense = form.save(commit=False)
+            expense.user = request.user
+            expense.save()
+            return redirect('expense_list')
+    else:
+        form = ExpenseForm()
+
+    return render(request, 'add_expense.html', {'form': form})
+
+@login_required
+def edit_expense(request, expense_id):
+    expense = get_object_or_404(Expense, id=expense_id, user=request.user)
+
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST, instance=expense)
+        if form.is_valid():
+            form.save()
+            return redirect('expense_list')
+    else:
+        form = ExpenseForm(instance=expense)
+
+    return render(request, 'edit_expense.html', {'form': form, 'expense': expense})
+
+@login_required
+def delete_expense(request, expense_id):
+    expense = get_object_or_404(Expense, id=expense_id, user=request.user)
+
+    if request.method == 'POST':
+        expense.delete()
+        return redirect('expense_list')
+
+    return render(request, 'delete_expense.html', {'expense': expense})

@@ -1,0 +1,16 @@
+<!-- templates/add_expense.html -->
+{% extends 'base.html' %}
+
+{% block title %}Add Expense{% endblock %}
+
+{% block content %}
+    <h1>Add Expense</h1>
+
+    <form method="post" action="{% url 'add_expense' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Expense</button>
+    </form>
+
+    <a href="{% url 'expense_list' %}">Back to Expense List</a>
+{% endblock %}
