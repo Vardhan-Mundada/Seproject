@@ -1,0 +1,27 @@
+<!-- templates/category_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Category List{% endblock %}
+
+{% block content %}
+    <h1 class="category-title">Category List</h1>
+    
+    <ul class="category-list">
+        {% for category in categories %}
+            <li>
+                {{ category.name }} - Budget Limit: {{ category.budget_limit }}
+                <a href="{% url 'edit_category' category_id=category.id %}" class="category-button">Edit</a>
+                <a href="{% url 'delete_category' category_id=category.id %}" class="category-button">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="category-title">Add Category</h2>
+    <form method="post" action="{% url 'add_category' %}" class="category-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+
+    <a href="{% url 'category_list' %}" class="category-button">Refresh Category List</a>
+{% endblock %}

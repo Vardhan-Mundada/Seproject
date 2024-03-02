@@ -1,0 +1,55 @@
+/* static/your_app/category_styles.css */
+
+body.category {
+    background-color: #f0f0f0;
+}
+
+h1.category-title {
+    color: #333;
+}
+
+ul.category-list {
+    list-style: none;
+    padding: 0;
+}
+
+ul.category-list li {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+ul.category-list li a {
+    color: #333;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+form.category-form {
+    margin-top: 20px;
+}
+
+form.category-form button {
+    background-color: #333;
+    color: white;
+}
+
+form.category-form button:hover {
+    background-color: #555;
+}
+
+a.category-button {
+    display: inline-block;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+a.category-button:hover {
+    background-color: #555;
+}

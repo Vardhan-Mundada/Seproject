@@ -1,0 +1,16 @@
+<!-- templates/add_category.html -->
+{% extends 'base.html' %}
+
+{% block title %}Add Category{% endblock %}
+
+{% block content %}
+    <h1 class="category-title">Add Category</h1>
+
+    <form method="post" action="{% url 'add_category' %}" class="category-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="category-button">Save</button>
+    </form>
+
+    <a href="{% url 'category_list' %}" class="category-button">Back to Category List</a>
+{% endblock %}

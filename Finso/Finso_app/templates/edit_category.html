@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Category - {{ form.instance.name }}{% endblock %}
+
+{% block content %}
+    <h1 class="category-title">Edit Category - {{ form.instance.name }}</h1>
+
+    <form method="post" action="{% url 'edit_category' category_id=form.instance.id %}" class="category-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="category-button">Save Changes</button>
+    </form>
+
+    <a href="{% url 'category_list' %}" class="category-button">Back to Category List</a>
+{% endblock %}
