@@ -30,3 +30,7 @@ class RecurringExpenseForm(forms.ModelForm):
 
 
 
+class ImageUploadForm(forms.Form):
+    image = forms.ImageField()
+
+

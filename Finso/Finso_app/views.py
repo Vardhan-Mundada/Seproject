@@ -390,7 +390,7 @@ def create_pie_chart(user, categories, expenses):
     values = list(category_totals.values())
 
     plt.figure(figsize=(5, 5))
-    plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=140, wedgeprops=dict(width=0.6))
     plt.title('Expense Distribution by Category')
 
     buffer = BytesIO()
@@ -456,6 +456,8 @@ def notifications(request):
     return render(request, 'notifications.html', context)
 
 
+# Recurring bills
+
 from .models import RecurringExpense
 from .forms import RecurringExpenseForm
 
@@ -473,3 +475,127 @@ def add_recurring_expense(request):
     else:
         form = RecurringExpenseForm()
     return render(request, 'add_recurring_expense.html', {'form': form})
+
+
+
+
+
+
+#Bill detection
+from .forms import ImageUploadForm
+import pytesseract
+from PIL import Image
+import re
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet
+import nltk
+
+@login_required
+
+def billamount(request):
+    if request.method == 'POST' and request.FILES['image']:
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = request.FILES['image']
+            text = extract_text_from_image(image)
+            print(text)
+            highest_amount = extract_highest_amount(text)
+            category_name = categorize_bill(text)
+            print("Highest Amount:", highest_amount)
+            print("Category:", category_name)
+
+            # Find or create the category
+            category, _ = Category.objects.get_or_create(name=category_name)
+
+            # Create the expense
+            if highest_amount and category:
+                expense = Expense.objects.create(
+                    user=request.user,
+                    amount=highest_amount,
+                    category=category,
+                    content=f"Expense for {category_name}"
+                )
+                expense.save()
+
+            return render(request, 'expense_statistics.html', {'category_name': category_name, 'highest_amount': highest_amount})
+    else:
+        form = ImageUploadForm()
+    return render(request, 'upload_receipt.html', {'form': form})
+
+def extract_text_from_image(image):
+    img = Image.open(image)
+    text = pytesseract.image_to_string(img)
+    return text
+
+def extract_highest_amount(text):
+    # Remove lines containing dates and bill numbers
+    lines = [line for line in text.split('\n') if not re.search(r'\b\d{2}\.\d{2}\.\d{4}\b|\bBill\s+No\.\s*\d+\b', line)]
+
+    # Extract amounts from remaining lines
+    amounts = []
+    for line in lines:
+        # Find numeric values in the line
+        nums = re.findall(r'\b\d+(?:\.\d+)?\b', line)
+        # Add numeric values to amounts list
+        amounts.extend(map(float, nums))
+
+    # Return the highest amount
+    if amounts:
+        return max(amounts)
+    else:
+        return None
+
+
+
+def categorize_bill(text):
+    nltk.download('punkt')
+    nltk.download('wordnet')
+
+    # Tokenize the text
+    tokens = word_tokenize(text.lower())
+
+    # Define categories
+    categories = {
+        'entertainment': ['happy', 'restaurant', 'food', 'kitchen', 'hotel', 'room', 'park', 'movie', 'cinema', 'popcorn', 'combo meal'],
+        'home_utility': ['internet', 'telephone', 'electricity', 'meter', 'wifi', 'broadband', 'consumer', 'reading', 'gas', 'water', 'postpaid', 'prepaid'],
+        'grocery': ['bigbasket', 'milk', 'atta', 'sugar', 'sunflower', 'oil', 'bread', 'vegetable', 'fruit', 'salt', 'paneer', 'brinjal', 'tomato', 'potato'],
+        'investment': ['endowment', 'grant', 'loan', 'applicant', 'income', 'expenditure', 'profit', 'interest', 'expense', 'finance', 'property', 'money', 'fixed', 'deposit', 'kissan', 'vikas'],
+        'transport': ['car', 'cab', 'ola', 'uber', 'autorickshaw', 'railway', 'air', 'emirates', 'aerofloat', 'taxi', 'booking', 'road', 'highway'],
+        'shopping': ['dress', 'iphone', 'laptop', 'saree', 'max', 'pantaloons', 'westside', 'vedic', 'makeup', 'lipstick', 'cosmetics', 'mac', 'facewash', 'heels', 'crocs', 'footwear', 'purse', 'hair', 'Ribbons'],
+        'education':['pencil', 'pen', 'geometry', 'box', 'ink', 'pages', 'book', 'books', 'notebook', 'textbook'],
+
+    }
+
+    # Categorize bill based on keywords
+    for category, keywords in categories.items():
+        if any(word in tokens for word in keywords):
+            return category
+    return None
+
+
+
+# Expense report
+import pandas as pd
+from django.http import HttpResponse
+
+def download_expenses(request):
+    expenses = Expense.objects.filter(user=request.user)
+    
+    # Create a DataFrame with the expense data
+    expense_data = []
+    for expense in expenses:
+        expense_data.append({
+            # 'Date': expense.date,
+            'Amount': expense.amount,
+            'Category': expense.category.name,
+            'Content': expense.content
+        })
+    df = pd.DataFrame(expense_data)
+
+    # Create an Excel writer object
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="expenses.xlsx"'
+    with pd.ExcelWriter(response, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+
+    return response

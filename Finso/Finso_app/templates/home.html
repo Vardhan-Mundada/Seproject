@@ -21,6 +21,12 @@
                  <a href="{% url 'category_list' %}">
                     <button type="button">Category</button>
                 </a>
+                <a href="{% url 'billamount' %}">
+                    <button type="button">Upload Bill</button>
+                </a>
+                <a href="{% url 'download_expenses' %}">
+                    <button type="button">download_expenses</button>
+                </a>
             {% else %}
                 <span></span>
             {% endif %}
