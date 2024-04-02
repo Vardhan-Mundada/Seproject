@@ -2,6 +2,8 @@
 from django import forms
 from .models import Category
 from .models import Expense
+from .models import RecurringExpense
+
 
 class ExpenseForm(forms.ModelForm):
     class Meta:
@@ -18,6 +20,13 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name', 'budget_limit']
+
+
+class RecurringExpenseForm(forms.ModelForm):
+    class Meta:
+        model = RecurringExpense
+        fields = ['name', 'amount', 'frequency', 'start_date', 'next_due_date']
+
 
 
 

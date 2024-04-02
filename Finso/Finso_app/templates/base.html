@@ -26,9 +26,13 @@
         </div>
         <div class="auth-buttons">
             {% if user.is_authenticated %}
-            <ul style="list-style: none;">
+            <ul style="list-style: none; display: flex;">
+                <li><a href="{% url 'notifications' %}">Notify</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            <!-- <ul style="list-style: none;">
             <li><a href="{% url 'logout' %}">Logout</a></li>
-            </ul>
+            </ul> -->
             {% else %}
             <ul class="loglist" style="list-style: none; display: flex;">
             <li><a href="{% url 'login' %}">Login</a></li>

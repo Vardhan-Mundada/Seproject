@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+</head>
+<body>
+    <h1>Notifications</h1>
+    
+    <h2>Exceeded Categories:</h2>
+    <ul>
+        {% for category in exceeded_categories %}
+            <li>{{ category.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Reminders for Recurring Expenses:</h2>
+    <ul>
+        {% for reminder in reminders %}
+            <li>{{ reminder.name }} - Due today</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
