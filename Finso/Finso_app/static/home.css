@@ -1,0 +1,45 @@
+#nav {
+  position: fixed;
+}
+
+.footer-main {
+}
+
+.navbar-brand img {
+  border-radius: 15px;
+}
+
+.body {
+  background-image: url("../static/images/background.png");
+  z-index: -1;
+}
+
+.card-parent {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.heading {
+  text-align: center;
+  padding: 200px;
+}
+
+.card {
+  height: 10rem;
+  width: 75%;
+  display: flex;
+  padding-left: 1rem;
+  margin-bottom: 5rem;
+  margin-left: 3rem;
+}
+
+.card-img-top {
+  object-fit: contain;
+  max-height: 150px; /* Adjust this value as needed */
+}
+
+.About script {
+  align-items: center;
+}

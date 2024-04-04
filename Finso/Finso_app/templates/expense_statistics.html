@@ -5,6 +5,27 @@
 {% block content %}
     <h1>Expense Statistics</h1>
     <div>
+        <p>Total Income: {{ total_income }}</p>
+        <p>Total Expenses: {{ total_expenses }}</p>
+        <p>Remaining Amount: {{ remaining_amount }}</p>
+    </div>
+    <h2>Category-wise Total Expenses</h2>
+    <ul>
+        {% for category_total in category_totals %}
+            <li>{{ category_total.category__name }} - ${{ category_total.total_expenses }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Recent Expenses</h2>
+    <ul>
+        {% for expense in recent_expenses %}
+            <li>{{ expense.date }} - {{ expense.content }} - ${{ expense.amount }}</li>
+        {% empty %}
+            <li>No recent expenses found.</li>
+        {% endfor %}
+    </ul>
+
+    <div>
         <label for="time_interval">Select Time Interval:</label>
         <select id="time_interval" onchange="updateCharts()">
             <option value="weekly" {% if time_interval == 'weekly' %}selected{% endif %}>Weekly</option>

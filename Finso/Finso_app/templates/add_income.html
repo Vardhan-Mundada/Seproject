@@ -1,0 +1,15 @@
+<!-- add_income.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Income</title>
+</head>
+<body>
+    <h2>Add Income</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Income</button>
+    </form>
+</body>
+</html>

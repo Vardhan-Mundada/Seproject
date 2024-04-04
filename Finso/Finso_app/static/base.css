@@ -1,0 +1,61 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
+
+.vertical-navbar {
+  
+  background:rgba(35, 36, 57, 1);
+  /* background: radial-gradient(
+    circle,
+    rgba(67, 69, 112, 1) 3%,
+    rgba(35, 36, 57, 1) 60%
+  ); */
+  width: 100px; /* Adjust the width of the navbar */
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.vertical-navbar ul {
+  list-style-type: none;
+ margin-top: 10rem;
+ padding-top: 10rem;
+  margin: 20px 0; /* Add spacing between icons and shift them downward */
+}
+
+.vertical-navbar li {
+  padding: 10px;
+  padding-top: 1rem;
+  position: relative; /* Positioning context for tooltip */
+}
+
+.vertical-navbar li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  position: relative; /* Necessary for positioning tooltip */
+}
+
+.vertical-navbar li a i {
+  font-size: 24px; /* Adjust icon size */
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  background-color: rgba(67, 69, 112, 1);
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  left: 50px; /* Adjust tooltip position */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.vertical-navbar li a:hover .tooltip {
+  display: block;
+}
+
+.profile{
+  margin-top: -10rem;
+}

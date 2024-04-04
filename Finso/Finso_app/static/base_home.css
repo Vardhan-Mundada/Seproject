@@ -14,7 +14,12 @@ body, h1, h2, h3, p, ul, li {
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #c2cfb4;
+    background: rgb(67, 69, 112);
+    background: radial-gradient(
+      circle,
+      rgba(67, 69, 112, 1) 3%,
+      rgba(35, 36, 57, 1) 60%
+    );
     max-width: 100vw;
     overflow-x: hidden;
 }

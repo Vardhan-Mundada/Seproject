@@ -19,5 +19,8 @@ urlpatterns=[
     path('add_recurring_expense/', views.add_recurring_expense, name='add_recurring_expense'),
     path('billamount/', views.billamount, name='billamount'),
     path('download/expenses/', views.download_expenses, name='download_expenses'),
+    path('add_income/', views.add_income, name='add_income'),
+    path('profile/', views.profile, name='profile'),
+    path('addall/', views.addall, name='addall'),
      
 ]

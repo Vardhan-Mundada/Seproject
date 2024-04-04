@@ -5,52 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'base_home.css' %}">
-    <link rel="stylesheet" href="{% static 'category_styles.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'base_home.css' %}"> -->
+    <!-- <link rel="stylesheet" href="{% static 'category_styles.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+
 
     <title>{% block title %}Finso - Expense Tracker{% endblock %}</title>
 </head>
 
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="logo">
-            <img src="{% static 'images/logo.jpg' %}" alt="Finso Logo">
-        </div>
-        <div class="nav-links">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact Us</a></li>
-            </ul>
-        </div>
-        <div class="auth-buttons">
-            {% if user.is_authenticated %}
-            <ul style="list-style: none; display: flex;">
-                <li><a href="{% url 'notifications' %}">Notify</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-                </ul>
-            <!-- <ul style="list-style: none;">
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-            </ul> -->
-            {% else %}
-            <ul class="loglist" style="list-style: none; display: flex;">
-            <li><a href="{% url 'login' %}">Login</a></li>
-            <li><a href="{% url 'register' %}">Register</a></li>
-            </ul>
+    <nav class="vertical-navbar">
+        <ul class="navv">  
+                       {% if user.is_authenticated %}
+                  
+                  <li class="profile"><a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i><span class="tooltip">Profile</span></a></li>
+                  <br><br><br><br><br><li><a href="{% url 'expense_statistics' %}"><i class="fas fa-tachometer-alt"></i><span class="tooltip">Dashboard</span></a></li>
+                  <li><a href="{% url 'addall' %}"><i class="fas fa-plus"></i><span class="tooltip">Add</span></a></li>
+                  <li><a href="{% url 'billamount' %}"><i class="fas fa-upload"></i><span class="tooltip">Upload Bills</span></a></li>
+                  <li><a href="{% url 'download_expenses' %}"><i class="fas fa-download"></i><span class="tooltip">Download Expense Report</span></a></li>
+                  <li><a href="{% url 'add_recurring_expense' %}"><i class="far fa-calendar-alt"></i><span class="tooltip">Calendar</span></a></li>
+                  <li><a href="{% url 'notifications' %}"><i class="fas fa-bell"></i><span class="tooltip">Notifications</span></a></li>
+                    <br><br><br><br><br><br><br>
+                  <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i><span class="tooltip">Logout</span></a></li>
+                  {% else %}
+                  <li><a href="{% url 'login' %}">Login</a></li>
+                  <li><a href="{% url 'register' %}">Register</a></li>
+                  
             {% endif %}
-        </div>
-    </nav>
-
-    <!-- Content Block -->
+          </ul>
+        </nav>
     <div class="content">
         {% block content %}{% endblock %}
     </div>
-
-    <!-- Footer -->
+<!-- 
     <footer>
         <p>&copy; 2024 Finso - Expense Tracker. All rights reserved.</p>
-    </footer>
+    </footer> -->
 </body>
 
 </html>
+
+
+

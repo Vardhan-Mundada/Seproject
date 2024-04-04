@@ -3,6 +3,11 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+def profile(request):
+    return render(request, 'profile.html')
+
+def addall(request):
+    return render(request, 'addall.html')
 
 def home(request):
     return render(request, 'home.html')
@@ -344,9 +349,13 @@ from django.utils import timezone
 import base64
 from io import BytesIO
 import matplotlib.pyplot as plt
+from django.db.models import Q
 from .models import Expense
+from django.db.models.functions import Coalesce, Cast
+from django.db.models import Sum, DecimalField, F, Value
 
 @login_required
+
 def expense_statistics(request):
     time_interval = request.GET.get('time_interval', 'weekly')  # Default to weekly if not specified
     end_date = timezone.now().date()
@@ -368,6 +377,26 @@ def expense_statistics(request):
     expenses = Expense.objects.filter(user=request.user, date__range=[start_date, end_date])
     categories = expenses.values_list('category__name', flat=True).distinct()
 
+    total_income = Income.objects.filter(user=request.user).aggregate(total_income=Sum('amount'))['total_income'] or 0
+    total_expenses = expenses.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0
+    remaining_amount = total_income - total_expenses
+
+    category_totals = (
+    Expense.objects.filter(user=request.user, date__range=[start_date, end_date])
+    .values('category__name')
+    .annotate(
+        total_expenses=Coalesce(
+            Cast(Sum('amount'), output_field=DecimalField()), 
+            Value(0, output_field=DecimalField())
+        )
+    )
+    .order_by('-total_expenses')[:4]
+)
+
+
+    # Get the 10 most recent expenses
+    recent_expenses = Expense.objects.filter(user=request.user).order_by('-date')[:7]
+
     pie_chart = create_pie_chart(request.user, categories, expenses)
     bar_chart = create_bar_chart(request.user, categories, expenses)
 
@@ -376,6 +405,11 @@ def expense_statistics(request):
         'categories': categories,
         'pie_chart': pie_chart,
         'bar_chart': bar_chart,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'remaining_amount': remaining_amount,
+        'recent_expenses': recent_expenses,
+        'category_totals': category_totals,
     }
 
     return render(request, 'expense_statistics.html', context)
@@ -461,8 +495,6 @@ def notifications(request):
 from .models import RecurringExpense
 from .forms import RecurringExpenseForm
 
-
-
 @login_required
 def add_recurring_expense(request):
     if request.method == 'POST':
@@ -471,12 +503,14 @@ def add_recurring_expense(request):
             expense = form.save(commit=False)
             expense.user = request.user
             expense.save()
-            return redirect('notifications')
+            return redirect('add_recurring_expense')
     else:
         form = RecurringExpenseForm()
-    return render(request, 'add_recurring_expense.html', {'form': form})
-
-
+    
+    # Retrieve the 8 most recent recurring expenses
+    recurring_expenses = RecurringExpense.objects.filter(user=request.user).order_by('-start_date')[:8]
+    
+    return render(request, 'add_recurring_expense.html', {'form': form, 'recurring_expenses': recurring_expenses})
 
 
 
@@ -599,3 +633,22 @@ def download_expenses(request):
         df.to_excel(writer, index=False)
 
     return response
+
+
+# Income
+
+from .forms import IncomeForm
+from .models import Income
+
+@login_required
+def add_income(request):
+    if request.method == 'POST':
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            income = form.save(commit=False)
+            income.user = request.user
+            income.save()
+            return redirect('expense_statistics')
+    else:
+        form = IncomeForm()
+    return render(request, 'add_income.html', {'form': form})

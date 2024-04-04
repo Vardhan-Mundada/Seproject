@@ -4,13 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Recurring Expense</title>
+    <link rel="stylesheet" href="../static/recurring_exp.css">
 </head>
 <body>
-    <h1>Add Recurring Expense</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
+<div class="container">
+    <div class="form-container">
+        <h1>Add Recurring Expense</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div class="cards-container">
+        {% for expense in recurring_expenses %}
+        <div class="card">
+            <h2>{{ expense.name }}</h2>
+            <p>Amount: ${{ expense.amount }}</p>
+            <p>Next Due Date: {{ expense.next_due_date }}</p>
+        </div>
+        {% empty %}
+        <p>No recurring expenses found.</p>
+        {% endfor %}
+    </div>
+</div>
 </body>
 </html>
