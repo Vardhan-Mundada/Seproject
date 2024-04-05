@@ -1,48 +1,120 @@
+
+
+
 {% extends 'base.html' %}
 
 {% block title %}Expense Statistics{% endblock %}
 
 {% block content %}
-    <h1>Expense Statistics</h1>
-    <div>
-        <p>Total Income: {{ total_income }}</p>
-        <p>Total Expenses: {{ total_expenses }}</p>
-        <p>Remaining Amount: {{ remaining_amount }}</p>
+
+<div style="margin-left:10rem;">
+    <h1><pre>    Expense Statistics</pre></h1>
+    <div class="container flex-container">
+        <div class="left-container">
+            <div class="general-info">
+                <div class="card">
+                    <div class="card-content">
+                        <p>Total Income: {{ total_income }}</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <p>Total Expenses: {{ total_expenses }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Category-wise Total Expenses</h2>
+            <ul>
+                {% for category_total in category_totals %}
+                    <li>{{ category_total.category__name }} - ${{ category_total.total_expenses }}</li>
+                {% endfor %}
+            </ul>
+
+            <div class="chart-container">
+                <label for="time_interval">Select Time Interval:</label>
+                <select id="time_interval" onchange="updateCharts()">
+                    <option value="weekly" {% if time_interval == 'weekly' %}selected{% endif %}>Weekly</option>
+                    <option value="monthly" {% if time_interval == 'monthly' %}selected{% endif %}>Monthly</option>
+                    <option value="3months" {% if time_interval == '3months' %}selected{% endif %}>3 Months</option>
+                    <option value="6months" {% if time_interval == '6months' %}selected{% endif %}>6 Months</option>
+                    <option value="yearly" {% if time_interval == 'yearly' %}selected{% endif %}>Yearly</option>
+                </select>
+                <div>
+                    <button onclick="showPieChart()">Show Pie Chart</button>
+                    <button onclick="showBarChart()">Show Bar Chart</button>
+                </div>
+                <div>
+                    <img id="pie-chart" src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">
+                    <img id="bar-chart" src="data:image/png;base64,{{ bar_chart }}" alt="Bar Chart" style="display: none;">
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-container recent-expenses">
+            <h2>Recent Expenses</h2>
+            <div class="card-container">
+                {% for expense in recent_expenses %}
+                    <div class="card">
+                        <div class="card-content">
+                            <p>Date: {{ expense.date }}</p>
+                            <p>Category: {{ expense.category }}</p>
+                            <p>Amount: ${{ expense.amount }}</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="card">
+                        <div class="card-content">
+                            <p>No recent expenses found.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-    <h2>Category-wise Total Expenses</h2>
-    <ul>
-        {% for category_total in category_totals %}
-            <li>{{ category_total.category__name }} - ${{ category_total.total_expenses }}</li>
-        {% endfor %}
-    </ul>
-    
-    <h2>Recent Expenses</h2>
-    <ul>
-        {% for expense in recent_expenses %}
-            <li>{{ expense.date }} - {{ expense.content }} - ${{ expense.amount }}</li>
-        {% empty %}
-            <li>No recent expenses found.</li>
-        {% endfor %}
-    </ul>
 
     <div>
-        <label for="time_interval">Select Time Interval:</label>
-        <select id="time_interval" onchange="updateCharts()">
-            <option value="weekly" {% if time_interval == 'weekly' %}selected{% endif %}>Weekly</option>
-            <option value="monthly" {% if time_interval == 'monthly' %}selected{% endif %}>Monthly</option>
-            <option value="3months" {% if time_interval == '3months' %}selected{% endif %}>3 Months</option>
-            <option value="6months" {% if time_interval == '6months' %}selected{% endif %}>6 Months</option>
-            <option value="yearly" {% if time_interval == 'yearly' %}selected{% endif %}>Yearly</option>
-        </select>
+        <a href="{% url 'expense_list' %}">Expense List</a>
     </div>
-    <div>
-        <button onclick="showPieChart()">Show Pie Chart</button>
-        <button onclick="showBarChart()">Show Bar Chart</button>
-    </div>
-    <div>
-        <img id="pie-chart" src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">
-        <img id="bar-chart" src="data:image/png;base64,{{ bar_chart }}" alt="Bar Chart" style="display: none;">
-    </div>
+</div>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .left-container {
+            width: 45%; /* Adjusted width for left container */
+            margin-right: 20px; 
+            margin-left: 70px;/* Add some space between left and right containers */
+        }
+
+        .right-container {
+            width: 45%; /* Adjusted width for right container */
+        }
+
+        .recent-expenses {
+            margin-left: 100px; /* Move recent expenses to the right */
+        }
+
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .card {
+            background-color: #333; /* Lighter version of black */
+            color: white;
+            margin-bottom: 10px;
+            width: 170px; /* Adjusted width for recent expenses cards */
+        }
+
+        .card-content {
+            padding: 10px;
+        }
+    </style>
 
     <script>
         function updateCharts() {

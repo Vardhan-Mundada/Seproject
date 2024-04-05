@@ -148,7 +148,7 @@ strong {
 
 a {
   text-decoration: none;
-  color: #111; /* Dark color */
+  color: #5c50a1; /* Dark color */
   width: 100%;
   height: 100%;
   display: flex;
@@ -200,12 +200,15 @@ a {
     /* background-color: rgba(255, 255, 255, 0.0); */
     margin: 1rem;
     border-radius: 15px;
+    text-align: center;
     padding: 20px;
-    box-shadow: 0 8px 32px 0 rgba(16, 18, 47, 0.722); /* Glass morphism effect */
+    /* box-shadow: 0 8px 32px 0 rgba(11, 12, 34, 0.279); */
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px); 
 }
-
+.cardd p{
+  padding: 0.5rem 1rem;
+}
 .cardd_img {
     width: 100%;
     border-radius: 10px;
@@ -240,15 +243,14 @@ a {
     <div class="overlay__btns">
 
       <button class="overlay__btn overlay__btn--transparent">
-        <a href="https://georgefrancis.dev/writing/create-a-generative-landing-page-and-webgl-powered-background/" target="_blank">
-
-          View Tutorial
+        <a href="{% url 'register' %}" target="_blank">
+          Start Tracking Now!
         </a>
       </button>
 
-      <button class="overlay__btn overlay__btn--colors">
-        <span>Randomise Colors</span>
-        <span class="overlay__btn-emoji">🎨</span>
+      <button class="overlay__btn overlay__btn--colors"><a href="{% url 'login' %}" target="_blank">
+          Look at Stats!
+      </a>
       </button>
     </div>
   </div>
@@ -262,18 +264,18 @@ a {
   <div class="cardss">
     <div class="cardd">
         <img class="cardd_img" src="../static/images/bills.jpg" alt="">
-        <h1>Card 1</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, perferendis?</p>
+        <h1>Scan Bills </h1>
+        <p>Introducing seamless transfer from bill images to transaction entries.</p>
     </div>
     <div class="cardd">
         <img class="cardd_img" src="../static/images/recurring.jpg" alt="">
-        <h1>Card 2</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, perferendis?</p>
+        <h1>Bill Reminders</h1>
+        <p>Receive timely reminders for recurring bills and transactions</p>
     </div>
     <div class="cardd">
         <img class="cardd_img" src="../static/images/charts.jpg" alt="">
-        <h1>Card 3</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, perferendis?</p>
+        <h1> Alert Notifications</h1>
+        <p>Receive alerts when the budget limit for a category is exceeded</p>
     </div>
 </div>
 

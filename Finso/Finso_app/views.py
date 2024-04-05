@@ -551,10 +551,43 @@ def billamount(request):
                 )
                 expense.save()
 
-            return render(request, 'expense_statistics.html', {'category_name': category_name, 'highest_amount': highest_amount})
+            # return render(request, 'expense_statistics.html', {'category_name': category_name, 'highest_amount': highest_amount})
+            return redirect('expense_statistics')
+
     else:
         form = ImageUploadForm()
     return render(request, 'upload_receipt.html', {'form': form})
+
+# def billamount(request):
+#     if request.method == 'POST':
+#         form = ImageUploadForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             image = request.FILES.get('receipt')  # Access 'receipt' field instead of 'image'
+#             if image:
+#                 text = extract_text_from_image(image)
+#                 print(text)
+#                 highest_amount = extract_highest_amount(text)
+#                 category_name = categorize_bill(text)
+#                 print("Highest Amount:", highest_amount)
+#                 print("Category:", category_name)
+
+#                 # Find or create the category
+#                 category, _ = Category.objects.get_or_create(name=category_name)
+
+#                 # Create the expense
+#                 if highest_amount and category:
+#                     expense = Expense.objects.create(
+#                         user=request.user,
+#                         amount=highest_amount,
+#                         category=category,
+#                         content=f"Expense for {category_name}"
+#                     )
+#                     expense.save()
+
+#                 return render(request, 'expense_statistics.html', {'category_name': category_name, 'highest_amount': highest_amount})
+#     else:
+#         form = ImageUploadForm()
+#     return render(request, 'upload_receipt.html', {'form': form})
 
 def extract_text_from_image(image):
     img = Image.open(image)
