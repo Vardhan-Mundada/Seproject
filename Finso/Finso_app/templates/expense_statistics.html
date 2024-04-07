@@ -7,56 +7,118 @@
 
 {% block content %}
 
-<div style="margin-left:10rem;">
-    <h1><pre>    Expense Statistics</pre></h1>
+{% load static %}
+<style>
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .left-container {
+        width: 45%; /* Adjusted width for left container */
+        margin-right: 20px; 
+        margin-left: 70px;/* Add some space between left and right containers */
+    }
+
+    .right-container {
+        width: 45%; /* Adjusted width for right container */
+    }
+
+    .recent-expenses {
+        margin-left: 100px; /* Move recent expenses to the right */
+    }
+
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card {
+        background-color: #23284051; /* Lighter version of black */
+        color: white;
+        margin-bottom: 10px;
+        padding: 1rem 2rem;
+        margin-right: 2rem;
+        border-radius: 2rem;
+        
+  box-shadow: 0 0.25rem 2rem 0 rgba(0, 0, 0, 0.205);
+        min-width: 15rem; /* Adjusted width for recent expenses cards */
+    }
+    .general_info{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+    .card-content {
+        padding: 10px;
+    }
+</style>
+
+<div>
+    <h1 style="margin-left: 5rem; margin-right: 1rem; color: white; margin-top: 2rem; font-family: 'Poppins'; font-weight: 600;"><pre>Expense Statistics</pre></h1>
     <div class="container flex-container">
         <div class="left-container">
             <div class="general-info">
-                <div class="card">
+                <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+                <div class="stat card">
                     <div class="card-content">
-                        <p>Total Income: {{ total_income }}</p>
+                        <div style="display: flex;">
+                            <div style="display: block;">
+                        <p style="font-weight: 700;">Total <br> Income</p>
+                        <p>{{ total_income }}</p>
+                    </div>
+                        <img src="{% static 'images/stat2_png.png' %}" style=" height: 40%; width: 40%; padding-left: 4rem;"   alt="">
+                    </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-content">
-                        <p>Total Expenses: {{ total_expenses }}</p>
+                <div class="card" >
+                    <div class="card-content" style="display: flex;">
+                        <div style="display: block;">
+                        <p style="font-weight: 700;">Total Expenses: </p>
+                        <p> {{ total_expenses }}</p>
+                        </div>
+                        <img src="{% static 'images/stat_png.png' %}" style=" height: 50%; width: 50%; padding-left: 2rem;"   alt="">
                     </div>
                 </div>
             </div>
+            </div>
             
-            <h2>Category-wise Total Expenses</h2>
-            <ul>
+            <h2 style="color: white; font-weight: 750;">Category-wise Total Expenses</h2>
+            <ul style="display: flex; list-style: none; flex-direction: row; justify-content: space-evenly;">
                 {% for category_total in category_totals %}
-                    <li>{{ category_total.category__name }} - ${{ category_total.total_expenses }}</li>
+                    <li style="display: flex; flex-direction: column; font-weight: 600;
+                    box-shadow: 0 0.25rem 2rem 0 rgba(0, 0, 0, 0.205);   margin-right:2rem ; color: rgb(255, 255, 255); background-color: rgba(92, 239, 163, 0); padding: 2rem; border-radius: 1rem;">{{ category_total.category__name }} <br><br>  Rs. {{ category_total.total_expenses }}</li>
                 {% endfor %}
             </ul>
 
-            <div class="chart-container">
-                <label for="time_interval">Select Time Interval:</label>
-                <select id="time_interval" onchange="updateCharts()">
-                    <option value="weekly" {% if time_interval == 'weekly' %}selected{% endif %}>Weekly</option>
-                    <option value="monthly" {% if time_interval == 'monthly' %}selected{% endif %}>Monthly</option>
-                    <option value="3months" {% if time_interval == '3months' %}selected{% endif %}>3 Months</option>
-                    <option value="6months" {% if time_interval == '6months' %}selected{% endif %}>6 Months</option>
-                    <option value="yearly" {% if time_interval == 'yearly' %}selected{% endif %}>Yearly</option>
+            <div class="chart-container" style="margin-top: 5rem; margin-bottom: 5rem;">
+                <label for="time_interval" style="color: white; padding: 2rem; font-weight: 600;">Select Time Interval:</label>
+                <select id="time_interval" onchange="updateCharts()" style="background: transparent; border: 2px solid rgba(255, 255, 255, 0.188); border-radius: 10px; padding: 0.8rem; color: white; font-size: 1rem; font-weight: 700;">
+                    <option style="color: black;" value="weekly" {% if time_interval == 'weekly' %}selected{% endif %}>Weekly</option>
+                    <option style="color: black;" value="monthly" {% if time_interval == 'monthly' %}selected{% endif %}>Monthly</option>
+                    <option style="color: black;" value="3months" {% if time_interval == '3months' %}selected{% endif %}>3 Months</option>
+                    <option style="color: black;" value="6months" {% if time_interval == '6months' %}selected{% endif %}>6 Months</option>
+                    <option style="color: black;" value="yearly" {% if time_interval == 'yearly' %}selected{% endif %}>Yearly</option>
                 </select>
-                <div>
-                    <button onclick="showPieChart()">Show Pie Chart</button>
-                    <button onclick="showBarChart()">Show Bar Chart</button>
+                <div style="display: flex; flex-direction: row; justify-content: space-evenly; margin-top: 2rem; margin-bottom: 2rem;">
+                    <button onclick="showPieChart()" style="background: transparent; border: 2px solid rgba(255, 255, 255, 0.164); border-radius: 10px; padding: 0.8rem; color: white; font-size: 1rem; font-weight: 700;">Show Pie Chart</button>
+                    <button onclick="showBarChart()" style="background: transparent; border: 2px solid rgba(255, 255, 255, 0.167); border-radius: 10px; padding: 0.8rem; color: white; font-size: 1rem; font-weight: 700;">Show Bar Chart</button>
                 </div>
-                <div>
-                    <img id="pie-chart" src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">
-                    <img id="bar-chart" src="data:image/png;base64,{{ bar_chart }}" alt="Bar Chart" style="display: none;">
+                <div style=" background: rgba(0, 0, 0, 0.052); padding: 2rem; border-radius: 2rem; box-shadow: 0 0.25rem 2rem 0 rgba(0, 0, 0, 0.505);   " >
+                    <img style="border-radius: 2rem;"  id="pie-chart" src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">
+                    <img style=" margin-left: -2rem; border-radius: 2rem;" id="bar-chart" src="data:image/png;base64,{{ bar_chart }}" alt="Bar Chart" style="display: none;">
                 </div>
             </div>
         </div>
         
-        <div class="right-container recent-expenses">
-            <h2>Recent Expenses</h2>
-            <div class="card-container">
+        <div class="right-container recent-expenses" style="margin-left: 10rem; margin-top: -5rem;">
+            <h2 style="font-weight: 700; font-family: 'Poppins'; color: white;">Recent Expenses</h2>
+            <div class="card-container" style="margin-bottom: 5rem;">
                 {% for expense in recent_expenses %}
                     <div class="card">
-                        <div class="card-content">
+                        <div class="card-content" style="min-width: 20vw;">
                             <p>Date: {{ expense.date }}</p>
                             <p>Category: {{ expense.category }}</p>
                             <p>Amount: ${{ expense.amount }}</p>
@@ -70,52 +132,15 @@
                     </div>
                 {% endfor %}
             </div>
+            
+        <a style="text-decoration: none; margin-left: 2rem; background: transparent; border: 2px solid rgba(255, 255, 255, 0.164); border-radius: 10px; padding: 0.8rem; color: white; font-size: 1rem; font-weight: 700;" href="{% url 'expense_list' %}">Expense List</a>
         </div>
+        
     </div>
 
     <div>
-        <a href="{% url 'expense_list' %}">Expense List</a>
     </div>
 </div>
-    <style>
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .left-container {
-            width: 45%; /* Adjusted width for left container */
-            margin-right: 20px; 
-            margin-left: 70px;/* Add some space between left and right containers */
-        }
-
-        .right-container {
-            width: 45%; /* Adjusted width for right container */
-        }
-
-        .recent-expenses {
-            margin-left: 100px; /* Move recent expenses to the right */
-        }
-
-        .card-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .card {
-            background-color: #333; /* Lighter version of black */
-            color: white;
-            margin-bottom: 10px;
-            width: 170px; /* Adjusted width for recent expenses cards */
-        }
-
-        .card-content {
-            padding: 10px;
-        }
-    </style>
-
     <script>
         function updateCharts() {
             var timeInterval = document.getElementById("time_interval").value;

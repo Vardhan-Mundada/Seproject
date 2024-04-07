@@ -6,17 +6,22 @@
 
 {% block content %}
 <link rel="stylesheet" href="../static/notifications.css">
+<style>
+    .container{
+        background-color: transparent;
+    }
+</style>
 <div class="container">
-    <div class="card">
+    <div class="card"  style="min-height: 75vh; margin-top: -2\1rem; background: transparent; color: white; box-shadow: 0 0.25rem 2rem 0 rgba(0, 0, 0, 0.436);  ">
 
         <h1>Notifications</h1>
         <div class="inner">
             <div class="notification-content">
                 <div class="exceeded-categories">
                     <h2></h2>
-                    <ul>
+                    <ul style="list-style: circle;">
                         {% for category in exceeded_categories %}
-                        <li>{{ category.name }}</li>
+                        <li>{{ category.name }} -- Budget Exceeded</li>
                         {% endfor %}
                     </ul>
                 </div>

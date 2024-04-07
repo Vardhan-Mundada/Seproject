@@ -14,7 +14,6 @@
     }
 
     .expense-item {
-        background-color: #ffffff;
         padding: 10px;
         margin-bottom: 10px;
         border-radius: 8px;
@@ -41,7 +40,7 @@
         display: inline-block;
         padding: 8px 16px;
         background-color: #45a049;
-        color: #fff;
+        color: #ffffff00;
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -78,20 +77,23 @@
     }
 </style>
 
-<div style="margin-left:10rem;">
+<div style="margin-left:10rem; color: white;">
     <h1>Expense List</h1>
     
     <ul>
         {% for expense in expenses %}
             <li>
                 Amount: {{ expense.amount }} - Category: {{ expense.category }} - Content: {{ expense.content }} - Date: {{ expense.date }}
-                <a href="{% url 'edit_expense' expense_id=expense.id %}">Edit</a>
-                <a href="{% url 'delete_expense' expense_id=expense.id %}">Delete</a>
+                <br><a style="text-decoration: none;" href="{% url 'edit_expense' expense_id=expense.id %}">Edit</a>
+                <a style="text-decoration: none;" href="{% url 'delete_expense' expense_id=expense.id %}">Delete</a>
             </li>
         {% endfor %}
+
+        <div style="margin-top: 2rem; margin-bottom: 4rem;"> 
+        <a style="text-decoration: none; margin-left: -2rem; background: transparent; border: 2px solid rgba(255, 255, 255, 0.164); border-radius: 10px; padding: 0.8rem; color: white; font-size: 1rem; font-weight: 700; " href="{% url 'add_expense' %}">Add Expense</a>
+    </div>
     </ul>
 
-    <a href="{% url 'add_expense' %}">Add Expense</a>
 
     </div>
 {% endblock %}

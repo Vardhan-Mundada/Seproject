@@ -11,6 +11,7 @@
 
 
     <title>{% block title %}Finso - Expense Tracker{% endblock %}</title>
+
 </head>
 
 <body>
@@ -18,14 +19,14 @@
         <ul class="navv">  
                        {% if user.is_authenticated %}
                   
-                  <li class="profile"><a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i><span class="tooltip">Profile</span></a></li>
+                  <li class="profile"><a href="{% url 'home' %}"><i class="fas fa-user-circle"></i><span class="tooltip">Profile</span></a></li>
                   <br><br><br><br><br><li><a href="{% url 'expense_statistics' %}"><i class="fas fa-tachometer-alt"></i><span class="tooltip">Dashboard</span></a></li>
                   <li><a href="{% url 'addall' %}"><i class="fas fa-plus"></i><span class="tooltip">Add</span></a></li>
                   <li><a href="{% url 'billamount' %}"><i class="fas fa-upload"></i><span class="tooltip">Upload Bills</span></a></li>
                   <li><a href="{% url 'download_expenses' %}"><i class="fas fa-download"></i><span class="tooltip">Download Expense Report</span></a></li>
                   <li><a href="{% url 'add_recurring_expense' %}"><i class="far fa-calendar-alt"></i><span class="tooltip">Calendar</span></a></li>
                   <li><a href="{% url 'notifications' %}"><i class="fas fa-bell"></i><span class="tooltip">Notifications</span></a></li>
-                    <br><br><br><br><br><br><br>
+                    <br><br><br><br><br>
                   <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i><span class="tooltip">Logout</span></a></li>
                   {% else %}
                   <li><a href="{% url 'login' %}">Login</a></li>
@@ -34,8 +35,11 @@
             {% endif %}
           </ul>
         </nav>
+        
+<div class="overlay">
     <div class="content">
         {% block content %}{% endblock %}
+    </div>
     </div>
 <!-- 
     <footer>

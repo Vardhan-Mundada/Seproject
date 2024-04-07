@@ -446,7 +446,7 @@ def create_bar_chart(user, categories, expenses):
     labels = list(category_totals.keys())
     values = list(category_totals.values())
 
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(6, 5))
     plt.bar(labels, values, color='blue')
     plt.xlabel('Categories')
     plt.ylabel('Total Expense Amount')

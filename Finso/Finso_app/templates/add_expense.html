@@ -106,15 +106,16 @@ input[type="date"]:focus {
 }
 
 </style>
-<div style="margin-left:10rem;">
-    <h1>Add Expense</h1>
+<div  style="color: white; margin-left:10rem; padding: 3rem;">
+    <h1 style="color: white;">Add Expense</h1>
 
     <form method="post" action="{% url 'add_expense' %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save Expense</button>
+        <button type="submit" style="text-decoration: none; margin-left: -2rem; background: transparent; border: 2px solid rgba(255, 255, 255, 0.164); border-radius: 10px; padding: 0.8rem; color: white; font-size: 1rem; font-weight: 700; ">Save Expense</button>
     </form>
-
-    <a href="{% url 'expense_list' %}">Back to Expense List</a>
+    <div style="margin-top: 2rem;">
+    <a style="text-decoration: none; margin-left: -2rem; background: transparent; border: 2px solid rgba(255, 255, 255, 0.164); border-radius: 10px; padding: 0.8rem; color: white; font-size: 1rem; font-weight: 700; " href="{% url 'expense_list' %}">Back to Expense List</a>
+  </div>
 </div>
 {% endblock %}
