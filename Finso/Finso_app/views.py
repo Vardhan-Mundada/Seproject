@@ -371,35 +371,36 @@ def delete_expense(request, expense_id):
     return image_base64
 
 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import base64
 from io import BytesIO
-import matplotlib.pyplot as plt
 from django.db.models import Q
 from .models import Expense
 from django.db.models.functions import Coalesce, Cast
 from django.db.models import Sum, DecimalField, F, Value
 
 @login_required
-
 def expense_statistics(request):
-    time_interval = request.GET.get('time_interval', 'weekly')  # Default to weekly if not specified
+    time_interval = request.GET.get('time_interval', 'weekly')  
     end_date = timezone.now().date()
     
     if time_interval == 'weekly':
         start_date = end_date - timezone.timedelta(days=7)
     elif time_interval == 'monthly':
-        start_date = end_date - timezone.timedelta(days=30)  # Approximate 30 days as a month
+        start_date = end_date - timezone.timedelta(days=30)  
     elif time_interval == '3months':
-        start_date = end_date - timezone.timedelta(days=90)  # 3 months
+        start_date = end_date - timezone.timedelta(days=90)  
     elif time_interval == '6months':
-        start_date = end_date - timezone.timedelta(days=180)  # 6 months
+        start_date = end_date - timezone.timedelta(days=180) 
     elif time_interval == 'yearly':
-        start_date = end_date - timezone.timedelta(days=365)  # 1 year
+        start_date = end_date - timezone.timedelta(days=365) 
     else:
-        # Handle other intervals if needed
         start_date = end_date
 
     expenses = Expense.objects.filter(user=request.user, date__range=[start_date, end_date])
@@ -420,7 +421,6 @@ def expense_statistics(request):
     )
     .order_by('-total_expenses')[:4]
 )
-
 
     # Get the 10 most recent expenses
     recent_expenses = Expense.objects.filter(user=request.user).order_by('-date')[:7]
