@@ -26,15 +26,6 @@ def custom_login(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
-# def register(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('login')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'register.html', {'form': form})
 
 from .forms import CustomUserCreationForm
 
@@ -52,6 +43,28 @@ def register(request):
 def user_logout(request):
     logout(request)
     return redirect('home')
+
+#signal
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+from django.conf import settings
+
+@receiver(post_save, sender=User)
+def send_welcome_email(sender, instance, created, **kwargs):
+    if created:
+        subject = 'Welcome to Our Website!'
+        message = 'Thank you for creating an account.'
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [instance.email]
+        send_mail(subject, message, from_email, to_email)
+        create_categories(instance)
+
+def create_categories(user):
+    Category.objects.create(user=user, name='education', budget_limit=1000)
+    Category.objects.create(user=user, name='grocery', budget_limit=2000)
+    Category.objects.create(user=user, name='shoppind', budget_limit=3000)
 
 # Expense category
 
