@@ -4,6 +4,17 @@ from .models import Category
 from .models import Expense
 from .models import RecurringExpense
 from .models import Income
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
 
 
 class ExpenseForm(forms.ModelForm):
