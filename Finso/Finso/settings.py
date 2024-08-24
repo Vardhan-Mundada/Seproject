@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['seproject-1-oymv.onrender.com',]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://seproject-1-oymv.onrender.com',
+]
 
 # Application definition
 
