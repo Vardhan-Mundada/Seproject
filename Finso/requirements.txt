@@ -1,0 +1,10 @@
+Django>=4.0,<5.0        # Core Django framework
+djangorestframework>=3.14.0  # Django REST framework for building APIs
+psycopg2>=2.9.6         # PostgreSQL database adapter (if using PostgreSQL)
+mysqlclient>=2.1.1      # MySQL database adapter (if using MySQL, choose either psycopg2 or mysqlclient)
+Pillow>=9.4.0           # Image processing library, often required for user-uploaded images
+django-crispy-forms>=1.14.0  # For better form rendering and styling
+django-allauth>=0.56.1  # For handling user authentication, registration, social accounts, etc.
+django-environ>=0.10.0  # For managing environment variables in Django
+gunicorn>=20.1.0        # WSGI HTTP server for deploying Django apps (if deploying to production)
+whitenoise>=6.5.0       # Simplifies serving static files in production
