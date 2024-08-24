@@ -9,3 +9,4 @@ django-environ>=0.10.0  # For managing environment variables in Django
 gunicorn>=20.1.0        # WSGI HTTP server for deploying Django apps (if deploying to production)
 whitenoise>=6.5.0       # Simplifies serving static files in production
 pytesseract==0.3.10
+matplotlib==3.8.3
