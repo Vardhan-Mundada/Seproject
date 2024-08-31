@@ -17,6 +17,11 @@
 <body>
     <nav class="vertical-navbar">
         <ul class="navv">  
+<li style="display: flex; justify-content: center; align-items: center;">
+                <label for="check" class="checkbtn cross">
+                    <i class="fas fa-times"></i> <!-- Close icon -->
+                </label>
+            </li>
                        {% if user.is_authenticated %}
                   
                   <li class="profile"><a href="{% url 'home' %}"><i class="fas fa-user-circle"></i><span class="tooltip">Profile</span></a></li>
